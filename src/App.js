@@ -11,52 +11,59 @@ import Footer from './components/Footer';
 
 import MyModal from './components/MyModal';
 import LoginForm from './components/user/LoginForm';
-
-import { GetBlogs } from './reducers/getBlogs';
+import SignupForm from './components/user/SignupForm';
+import About from './components/about/About';
 
 import './App.css';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const dispatch = useDispatch();
-
-  //console.log('=====', blogs)
-  useEffect(() => {
-    dispatch(GetBlogs());
-  }, [])
+  const [isLogin, setIsLogin] = useState(true);
 
   let [modalVisible, setModalVisible] = useState(false);
-  const showModal = () =>{
+
+  const showModal = (type) => {
+    setIsLogin(type === 'login');
     setModalVisible(() => true)
   }
   const hideModal = () =>{
     setModalVisible(() => false)
   }
-  return (
-    
-      <div className="wrapper">
-        <SideBar />
-        <div className='content'>
-          <NavBar showModal={showModal} hideModal={hideModal} />
 
-          <BrowserRouter>
+  const isLoggedIn = useSelector((state) => state.userInfo.loggedIn);
+  const classname = isLoggedIn ? 'content loggedin' : 'content';
+
+  return (
+    <BrowserRouter>
+      <div className="wrapper">
+        { !isLoggedIn && <SideBar /> }
+        <div className={classname}>
+            <NavBar showModal={showModal} hideModal={hideModal} />
+
+          
             <Routes>
               <Route path="/" element={<BlogList/>} />
               <Route path="/blog/:blogId" element={<BlogDetail/>} />
+              <Route path="/about" element={<About/>} />
             
             </Routes>
-          </BrowserRouter>
 
           <Footer />
           
         </div>
         <Toaster />
-        <MyModal modal={modalVisible}>
-          <LoginForm />
+        <MyModal 
+          modal={modalVisible}
+          hideModal={hideModal}
+          label={isLogin ? 'Login': 'Signup'}
+          >
+          {isLogin && <LoginForm/>}
+          {!isLogin && <SignupForm/>}
         </MyModal>
 
       </div >
-    
+      </BrowserRouter>
   );
 }
 

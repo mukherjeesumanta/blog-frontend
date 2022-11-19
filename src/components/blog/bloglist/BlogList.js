@@ -1,8 +1,17 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { BlogThunk } from '../../../reducers/blogReducer';
 import ListItem from "../listitem/ListItem";
 
 const BlogList = () => {
+    const isLoggedIn = JSON.parse(sessionStorage.getItem("loggedIn"));
+    const endpoint = isLoggedIn ? 'get-my-blogs' : '';
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(BlogThunk({ endpoint, method: 'GET' }));
+    }, [endpoint])
     const blogs = useSelector(state => state.blogs)
     const data = blogs.isSuccess ? blogs.data : [];
     //console.log('========', data)

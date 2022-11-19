@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FetchData } from "../utils/connect";
 
-export const loginLogout = createAsyncThunk("user/login/logout", async (obj) => {
+export const auth = createAsyncThunk("user/login/logout", async (obj) => {
   const options = {
-    method: obj.action === 'login' ? 'POST' : 'GET'
+    method: ['login', 'signup'].includes(obj.action) ? 'POST' : 'GET'
   };
-  if(obj.action === 'login' && !!obj.userData) {
+  if(['login', 'signup'].includes(obj.action) && !!obj.userData) {
     options.body = { ...obj.userData }
   };
   //debugger;
@@ -13,19 +13,20 @@ export const loginLogout = createAsyncThunk("user/login/logout", async (obj) => 
   
   return data;
 });
-const loginLogoutSlice = createSlice({
+const authSlice = createSlice({
     name: "userInfo",
     initialState: {
       loading: false,
       isSuccess: false,
-      message: ""
+      message: "",
+      loggedIn: JSON.parse(sessionStorage.getItem("loggedIn")) || false
     },
     reducers: {},
     extraReducers: {
-      [loginLogout.pending]: (state, action) => {
+      [auth.pending]: (state, action) => {
         state.loading = true;
       },
-      [loginLogout.fulfilled]: (state, action) => {
+      [auth.fulfilled]: (state, action) => {
         const endpoint = action.meta.arg.action;
 
         state.loading = false;
@@ -33,20 +34,21 @@ const loginLogoutSlice = createSlice({
         state.isSuccess = true;
         //console.log('userdata--', state, action)
 
-        if(endpoint === 'login') {
+        if(['login', 'signup'].includes(endpoint)) {
           state.loggedIn = true;
           sessionStorage.setItem("data", JSON.stringify(action.payload.data));
           sessionStorage.setItem("authToken", action.payload.token);
+          sessionStorage.setItem("loggedIn", true);
         } else {
           state.loggedIn = false;
           sessionStorage.removeItem("data");
           sessionStorage.removeItem("authToken");
+          sessionStorage.removeItem("loggedIn");
         }
-        
-        
+
         //window.location.reload()
       },
-      [loginLogout.rejected]: (state, { payload }) => {
+      [auth.rejected]: (state, { payload }) => {
         state.loading = false;
         state.isSuccess = false;
         state.message = "failed";
@@ -54,5 +56,5 @@ const loginLogoutSlice = createSlice({
     },
   });
   
-  export default loginLogoutSlice;
+  export default authSlice;
 

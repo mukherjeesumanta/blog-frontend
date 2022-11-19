@@ -17,7 +17,7 @@ const MyModal = (props) => {
     return (
       <Modal show={props.modal} onHide={props.hideModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Login Form</Modal.Title>
+            <Modal.Title>{props.label} Form</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {props.children}

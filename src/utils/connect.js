@@ -4,7 +4,7 @@ const REACT_APP_BE = 'http://localhost:3000/';      //'http://localhost:3000/api
 
 
 export const FetchData = async (endpoint, { method, body, ...customConfig } = {}) => {
-    const token = localStorage.getItem("accesstoken");
+    const token = sessionStorage.getItem("authToken");
     const headers = { "Content-Type": "application/json" };
 
     if (token) {

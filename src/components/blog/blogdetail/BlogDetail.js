@@ -19,7 +19,7 @@ const BlogDetail = () => {
 
     const blogDetail = useSelector(state => state.blogDetail);
     const data = blogDetail.isSuccess ? blogDetail.data : [];
-    console.log(data)
+    
     return (
             <div className="container py-5 px-2 bg-white">
             <div className="row px-4">
@@ -29,7 +29,7 @@ const BlogDetail = () => {
                     <div className="d-flex">
                         <p className="mr-3 text-muted"><i className="fa fa-calendar-alt"></i> {new Date(data.createdAt).toLocaleDateString("en-US")}</p>
                         <p className="mr-3 text-muted"><i className="fa fa-folder"></i> {data.category}</p>
-                        <p className="mr-3 text-muted"><i className="fa fa-comments"></i> 15 {data.comments}</p>
+                        {/* <p className="mr-3 text-muted"><i className="fa fa-comments"></i> {data.comments}</p> */}
                     </div>
                     <p>{data.description}</p>
                     

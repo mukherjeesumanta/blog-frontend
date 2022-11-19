@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 
-import { loginLogout } from "../../reducers/loginLogout";
+import { auth } from "../../reducers/auth";
 
 
 const LoginForm = ({ onSubmit }) => {
@@ -14,7 +14,7 @@ const LoginForm = ({ onSubmit }) => {
     const onClickLogin = (e) => {
       e.preventDefault();
 
-      dispatch(loginLogout({
+      dispatch(auth({
         action: 'login',
         userData: {
           email,

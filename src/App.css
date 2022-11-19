@@ -20,6 +20,10 @@
   float: left;
   background: #f1f3ff;
 }
+.wrapper .content.loggedin {
+  margin-left: 0;
+  width: 100%;
+}
 
 @media (min-width: 768px) {
   .wrapper .content {

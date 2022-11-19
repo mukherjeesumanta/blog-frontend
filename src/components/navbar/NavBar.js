@@ -1,23 +1,33 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
-import { loginLogout } from '../../reducers/loginLogout';
+import { auth } from '../../reducers/auth';
 import './NavBar.css';
 
 const NavBar = (props) => {
     let { isSuccess } = useSelector((state) => state.userInfo)
-    const token = sessionStorage.getItem("authToken");
+    const loggedIn = sessionStorage.getItem("loggedIn");
+    const userName = JSON.parse(sessionStorage.getItem("data"))?.user?.name;
 
     isSuccess && props.hideModal();
 
     const dispatch = useDispatch();
 
+    const openModal = (type = 'login') => {
+        props.showModal(type);
+    }
+
     const onClickLogin = () => {
-        props.showModal();
+        openModal('login');
+    }
+
+    const onClickSignup = () => {
+        openModal('signup');
     }
 
     const onClickLogout = () => {
-        dispatch(loginLogout({action: 'logout'}));
+        dispatch(auth({action: 'logout'}));
     }
 
     return (
@@ -29,18 +39,25 @@ const NavBar = (props) => {
                 </button>
                 <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div className="navbar-nav m-auto">
-                        <a href="index.html" className="nav-item nav-link active">Home</a>
+                        <NavLink className="nav-item nav-link" to="/">Home</NavLink>
+                        <NavLink className="nav-item nav-link" to="/about">About </NavLink>
+                        {/* <a href="/" className="nav-item nav-link active">Home</a>
                         <a href="about.html" className="nav-item nav-link">About</a>
-                        <a href="contact.html" className="nav-item nav-link">Contact</a>
+                        <a href="contact.html" className="nav-item nav-link">Contact</a> */}
                     </div>
                     <div className="navbar-nav ">
-                        { (!!token) && <a href="#" 
+                        { (!!loggedIn) && <p className='mt-2 mr-2'>Welcome {userName}!</p>}
+
+                        { (!!loggedIn) && <a href="#" 
                         className="nav-item nav-link" 
                         onClick={onClickLogout}>Logout</a>}
 
-                        { !token && <a href="#" 
+                        { !loggedIn && <a href="#" 
                         className="nav-item nav-link" 
                         onClick={onClickLogin}>Login</a>}
+                        { !loggedIn && <a href="#" 
+                        className="nav-item nav-link" 
+                        onClick={onClickSignup}>Signup</a>}
                     </div>
                 </div>
             </nav>
