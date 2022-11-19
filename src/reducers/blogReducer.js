@@ -12,8 +12,16 @@ const BlogSlice = createSlice({
       loading: false,
       isSuccess: false,
       message: "",
+      isEditMode: false
     },
-    reducers: {},
+    reducers: {
+      openEditMode(state) {
+        state.isEditMode = true;
+      },
+      closeEditMode(state) {
+        state.isEditMode = false;
+      }
+    },
     extraReducers: {
       [BlogThunk.pending]: (state, action) => {
         state.loading = true;
@@ -42,5 +50,6 @@ const BlogSlice = createSlice({
     },
   });
   
+  export const { openEditMode, closeEditMode } = BlogSlice.actions;
   export default BlogSlice;
 

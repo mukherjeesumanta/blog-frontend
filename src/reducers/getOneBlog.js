@@ -11,7 +11,7 @@ const singleBlogSlice = createSlice({
       data: [],
       loading: false,
       isSuccess: false,
-      message: "",
+      message: ""
     },
     reducers: {},
     extraReducers: {

@@ -23,7 +23,7 @@ const MyModal = (props) => {
             {props.children}
           </Modal.Body>
          
-        </Modal>
+      </Modal>
     );
   }
 
