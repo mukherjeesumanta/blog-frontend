@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { BlogThunk, openEditMode } from "../../../reducers/blogReducer";
 import BlogModal from "../modal/BlogModal";
+import { stripHtml } from "../../../utils/util";
 
 import "./ListItem.css";
 
@@ -66,10 +67,10 @@ const ListItem = (props) => {
                             <i className="fa fa-comments"></i> {props.comments} Comments
                         </small>
                     </div>
-                    <p>{props.shortDescription}</p>
-                    <a className="btn btn-link p-0" href={props.blogId}>
+                    <p>{stripHtml(props.shortDescription)}</p>
+                    <Link className="link-dark" to={redirectTo}>
                         Read More <i className="fa fa-angle-right"></i>
-                    </a>
+                    </Link>
                 </div>
             </div>
             <BlogModal blog={{ ...props }} />

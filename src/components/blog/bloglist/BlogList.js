@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BlogThunk } from '../../../reducers/blogReducer';
 import ListItem from "../listitem/ListItem";
 
+import { parseHtmlEntities } from '../../../utils/util';
+
 const BlogList = () => {
     const isLoggedIn = JSON.parse(sessionStorage.getItem("loggedIn"));
     const endpoint = isLoggedIn ? 'get-my-blogs' : '';
@@ -22,7 +24,7 @@ const BlogList = () => {
             createdAt={blog.createdAt}
             category={blog.category}
             comments={blog.comments}
-            shortDescription={blog.shortDescription}
+            shortDescription={parseHtmlEntities(blog.shortDescription).replace(/<(.|\n)*?>/g, '')}
             images={blog.images}
             blogId={blog._id}
             key={blog._id}

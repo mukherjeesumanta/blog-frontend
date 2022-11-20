@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { FetchData } from "../utils/connect";
+import { FetchData } from "../utils/util";
 
 export const BlogThunk = createAsyncThunk("all/blogs", async ({endpoint, method, body}) => {
   const data  = await FetchData(`/blogs/${endpoint}`, { method : method || 'GET', body });
@@ -30,7 +30,17 @@ const BlogSlice = createSlice({
         state.blogDetail.data.title = payload;
       },
       updateBlogContent(state, { payload }) {
-        state.blogDetail.data.description = payload;
+        state.blogDetail.data.description = payload.content;
+
+        const index = state.data.findIndex((blog) => blog._id === payload.blogId)
+        const blogCopy = JSON.parse(JSON.stringify(state.blogDetail))
+        //state.data[index] = {...state.blogDetail}
+      },
+
+      updateBlogList(state, blogId) {
+        const blogItem = state.data.filter((blog) => blog._id === blogId)
+        blogItem.title = state.blogDetail.data.title
+        blogItem.description = state.blogDetail.data.description
       }
     },
     extraReducers: {
@@ -71,6 +81,6 @@ const BlogSlice = createSlice({
     },
   });
   
-  export const { openEditMode, closeEditMode, updateBlogTitle, updateBlogContent } = BlogSlice.actions;
+  export const { openEditMode, closeEditMode, updateBlogTitle, updateBlogContent, updateBlogList } = BlogSlice.actions;
   export default BlogSlice;
 

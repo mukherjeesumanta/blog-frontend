@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 import { BlogThunk } from "../../../reducers/blogReducer";
+import { parseHtmlEntities, stripScript } from "../../../utils/util";
 
 import cover from "../../../img/detail.jpg";
 import blogImg from "../../../img/blog-1.jpg";
@@ -33,8 +34,7 @@ const BlogDetail = () => {
                         <p className="mr-3 text-muted"><i className="fa fa-calendar-alt"></i> {new Date(data.createdAt).toLocaleDateString("en-US")}</p>
                         <p className="mr-3 text-muted"><i className="fa fa-folder"></i> {data.category}</p>
                     </div>
-                    <p>{data.description}</p>
-                    
+                    <div dangerouslySetInnerHTML={{__html: parseHtmlEntities(stripScript(data.description))}}></div>
                 </div>               
             </div>
         </div>

@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Modal, Button, Form } from "react-bootstrap";
 import SunEditor, { buttonList } from 'suneditor-react';
 
-import { BlogThunk, closeEditMode, updateBlogTitle, updateBlogContent } from "../../../reducers/blogReducer";
+import { BlogThunk, closeEditMode, updateBlogTitle, updateBlogContent, updateBlogList } from "../../../reducers/blogReducer";
+import { parseHtmlEntities } from "../../../utils/util";
 
 import 'suneditor/dist/css/suneditor.min.css';
 import './BlogModal.css'
@@ -41,17 +42,22 @@ const BlogModal = (props) => {
         dispatch(updateBlogTitle(e.target.value))
     }
     const onContentChange = (content) => {
-        dispatch(updateBlogContent(content))
+        dispatch(updateBlogContent({content, blogId}))
+    }
+
+    const updateBlogList = (blogId) => {
+        dispatch(updateBlogList(blogId))
     }
 
     const onClickSave = () => {
-        console.log('=========', data)
+        //console.log('=========', data)
         dispatch(BlogThunk({
             endpoint: blogId,
             method: 'PATCH',
             body: data
         }))
         hideModal()
+        //updateBlogList(blogId)
     }
 
     return (
@@ -67,9 +73,7 @@ const BlogModal = (props) => {
                     getSunEditorInstance={getSunEditorInstance}
                     setOptions={{
                         height: 200,
-                        buttonList: buttonList.formatting, // Or Array of button list, eg. [['font', 'align'], ['image']]
-                        // plugins: [font] set plugins, all plugins are set by default
-                        // Other option
+                        buttonList: buttonList.formatting,
                         charCounter: true,
                         charCounterType: 'char'
                     }}
@@ -77,7 +81,7 @@ const BlogModal = (props) => {
                     height="200"
                     width="100%"
                     placeholder="Start writing here..."
-                    setContents={data.description}
+                    setContents={parseHtmlEntities(data.description)}
                     onChange={onContentChange}
                 />
             </Modal.Body>

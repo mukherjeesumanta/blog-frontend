@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { FetchData } from "../utils/connect";
+import { FetchData } from "../utils/util";
 
 export const auth = createAsyncThunk("user/login/logout", async (obj) => {
   const options = {
