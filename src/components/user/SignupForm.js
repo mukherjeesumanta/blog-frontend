@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import toast from 'react-hot-toast';
 
 import { auth } from "../../reducers/auth";
 
 
-const SignupForm = ({ onSubmit }) => {
+const SignupForm = (props) => {
     const [name, setName] = useState("");
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
@@ -14,10 +15,10 @@ const SignupForm = ({ onSubmit }) => {
 
     const dispatch = useDispatch();
 
-    const onClickSignup = (e) => {
+    const onClickSignup = async (e) => {
       e.preventDefault();
 
-      dispatch(auth({
+      const result = await dispatch(auth({
         action: 'signup',
         userData: {
           name,
@@ -27,6 +28,12 @@ const SignupForm = ({ onSubmit }) => {
           passwordConfirm
         }
       }))
+
+      if(!!result.error){
+        toast.error(result.error.message || 'Something went wrong!!')
+      } else {
+          props.hideModal()
+      }
     }
     return (
       <Form onSubmit={()=>{}}>

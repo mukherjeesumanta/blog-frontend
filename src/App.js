@@ -9,25 +9,13 @@ import BlogList from './components/blog/bloglist/BlogList';
 import BlogDetail from './components/blog/blogdetail/BlogDetail';
 import Footer from './components/Footer';
 
-import MyModal from './components/MyModal';
-import LoginForm from './components/user/LoginForm';
-import SignupForm from './components/user/SignupForm';
+
 import About from './components/about/About';
 
 import './App.css';
 
 function App() {
-  const [isLogin, setIsLogin] = useState(true);
 
-  let [modalVisible, setModalVisible] = useState(false);
-
-  const showModal = (type) => {
-    setIsLogin(type === 'login');
-    setModalVisible(() => true)
-  }
-  const hideModal = () =>{
-    setModalVisible(() => false)
-  }
 
   const isLoggedIn = useSelector((state) => state.userInfo.loggedIn);
   const classname = isLoggedIn ? 'content loggedin' : 'content';
@@ -37,29 +25,17 @@ function App() {
       <div className="wrapper">
         { !isLoggedIn && <SideBar /> }
         <div className={classname}>
-            <NavBar showModal={showModal} hideModal={hideModal} />
-
-          
+            <NavBar />
             <Routes>
               <Route path="/" element={<BlogList/>} />
               <Route path="/blog/:blogId" element={<BlogDetail/>} />
               <Route path="/about" element={<About/>} />
-            
             </Routes>
 
           <Footer />
           
         </div>
         <Toaster />
-        <MyModal 
-          modal={modalVisible}
-          hideModal={hideModal}
-          label={isLogin ? 'Login': 'Signup'}
-          >
-          {isLogin && <LoginForm/>}
-          {!isLogin && <SignupForm/>}
-        </MyModal>
-
       </div >
       </BrowserRouter>
   );

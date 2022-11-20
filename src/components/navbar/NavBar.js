@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
+import MyModal from '../MyModal';
+import LoginForm from '../user/LoginForm';
+import SignupForm from '../user/SignupForm';
 import { auth } from '../../reducers/auth';
 import CreateModal from '../blog/modal/CreateModal';
 import { openCreateMode } from '../../reducers/blogReducer';
@@ -8,24 +12,32 @@ import { openCreateMode } from '../../reducers/blogReducer';
 import './NavBar.css';
 
 const NavBar = (props) => {
-    let { isSuccess } = useSelector((state) => state.userInfo)
+    const [isLogin, setIsLogin] = useState(true);
+    let [modalVisible, setModalVisible] = useState(false);
+
+    const showModal = (type) => {
+      setIsLogin(type === 'login');
+      setModalVisible(() => true)
+    }
+    const hideModal = () =>{
+      setModalVisible(() => false)
+    }
+
+
+    let { isSuccess } = useSelector((state) => state.userInfo);
     const loggedIn = sessionStorage.getItem("loggedIn");
     const userName = JSON.parse(sessionStorage.getItem("data"))?.user?.name;
 
-    isSuccess && props.hideModal();
+    //isSuccess && hideModal();
 
     const dispatch = useDispatch();
 
-    const openModal = (type = 'login') => {
-        props.showModal(type);
-    }
-
     const onClickLogin = () => {
-        openModal('login');
+        showModal('login');
     }
 
     const onClickSignup = () => {
-        openModal('signup');
+        showModal('signup');
     }
 
     const onClickLogout = () => {
@@ -45,7 +57,7 @@ const NavBar = (props) => {
                     </button>
                     <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div className="navbar-nav m-auto">
-                            <NavLink className="nav-item nav-link" to="/">{(!!loggedIn) ? 'Dashboard' : 'Home' }</NavLink>
+                            <NavLink className="nav-item nav-link" to="/">{(!!loggedIn) ? 'Dashboard' : 'Home'}</NavLink>
                             <NavLink className="nav-item nav-link" to="/about">About </NavLink>
                             {/* <a href="/" className="nav-item nav-link active">Home</a>
                         <a href="about.html" className="nav-item nav-link">About</a>
@@ -73,6 +85,14 @@ const NavBar = (props) => {
                 </nav>
             </div>
             <CreateModal />
+            <MyModal
+                modal={modalVisible}
+                hideModal={hideModal}
+                label={isLogin ? 'Login' : 'Signup'}
+            >
+                {isLogin && <LoginForm hideModal={hideModal} />}
+                {!isLogin && <SignupForm hideModal={hideModal} />}
+            </MyModal>
         </>
     )
 }

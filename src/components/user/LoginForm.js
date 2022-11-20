@@ -1,26 +1,32 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import toast from 'react-hot-toast';
 
 import { auth } from "../../reducers/auth";
 
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const dispatch = useDispatch();
 
-    const onClickLogin = (e) => {
+    const onClickLogin = async (e) => {
       e.preventDefault();
 
-      dispatch(auth({
+      const result = await dispatch(auth({
         action: 'login',
         userData: {
           email,
           password
         }
       }))
+      if(!!result.error){
+        toast.error(result.error.message || 'Something went wrong!!')
+      } else {
+          props.hideModal()
+      }
     }
     return (
       <Form onSubmit={()=>{}}>
