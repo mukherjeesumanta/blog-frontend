@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Redirect } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import NavBar from './components/navbar/NavBar';
 import SideBar from "./components/sidebar/SideBar";
@@ -15,10 +15,8 @@ import SignupForm from './components/user/SignupForm';
 import About from './components/about/About';
 
 import './App.css';
-//import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(true);
 
   let [modalVisible, setModalVisible] = useState(false);

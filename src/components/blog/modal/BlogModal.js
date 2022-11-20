@@ -2,8 +2,9 @@ import { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, Button, Form } from "react-bootstrap";
 import SunEditor, { buttonList } from 'suneditor-react';
+import { toast } from 'react-hot-toast';
 
-import { BlogThunk, closeEditMode, updateBlogTitle, updateBlogContent, updateBlogList } from "../../../reducers/blogReducer";
+import { BlogThunk, closeEditMode, closeCreateMode, updateBlogTitle, updateBlogContent, updateNewBlogTitle, updateNewBlogContent } from "../../../reducers/blogReducer";
 import { parseHtmlEntities } from "../../../utils/util";
 
 import 'suneditor/dist/css/suneditor.min.css';
@@ -11,11 +12,14 @@ import './BlogModal.css'
 
 
 const BlogModal = (props) => {
+    let blogPath = '';
     const dispatch = useDispatch();
 
     const hideModal = () => {
         if(props.changeType === 'edit') {
             dispatch(closeEditMode())
+        } else if(props.changeType === 'create') {
+            dispatch(closeCreateMode())
         }
     }
 
@@ -26,36 +30,55 @@ const BlogModal = (props) => {
         editor.current = sunEditor;
     };
 
-    const blogDetail = useSelector(state => state.blogs.blogDetail);
-    const data = blogDetail.isSuccess ? blogDetail.data : {};
+    if(props.changeType === 'edit') {
+        blogPath = 'blogDetail'
+    } else if(props.changeType === 'create') {
+        blogPath = 'newBlog'
+    }
+    const blogData = useSelector(state => state.blogs[blogPath]);
+    const data = (props.changeType === 'edit') ? (blogData.isSuccess) ? blogData.data : {} : blogData.data;
 
     const onTitleChange = (e) => {
+        const title = e.target.value;
         if(props.changeType === 'edit') {
-            dispatch(updateBlogTitle(e.target.value))
+            dispatch(updateBlogTitle(title))
+        } else if(props.changeType === 'create') {
+            dispatch(updateNewBlogTitle(title))
         }
     }
     const onContentChange = (content) => {
         if(props.changeType === 'edit') {
             dispatch(updateBlogContent(content))
+        } else if(props.changeType === 'create') {
+            dispatch(updateNewBlogContent(content))
         }
     }
 
-    const onClickSave = () => {
-        //console.log('=========', data)
+    const onClickSave = async () => {
+        let result;
         if(props.changeType === 'edit') {
-            dispatch(BlogThunk({
+            result = await dispatch(BlogThunk({
                 endpoint: data._id,
                 method: 'PATCH',
                 body: data
             }))
+        } else if(props.changeType === 'create') {
+            result = await dispatch(BlogThunk({
+                endpoint: '',
+                method: 'POST',
+                body: data
+            }))
+        }
+
+        if(!!result.error){
+            toast.error(result.error.message || 'Something went wrong!!')
+        } else {
             hideModal()
         }
-        
-        //updateBlogList(props.blogId)
     }
 
     return (
-        <Modal show={props.isVisible} onHide={props.onHide} dialogClassName="blog-edit-modal">
+        <Modal show={props.isVisible} onHide={hideModal} dialogClassName="blog-edit-modal">
             <Modal.Header closeButton>
                 <Modal.Title>{props.title}</Modal.Title>
             </Modal.Header>

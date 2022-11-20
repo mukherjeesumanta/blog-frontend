@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 
 import { BlogThunk } from "../../../reducers/blogReducer";
 import { stripHtml } from "../../../utils/util";
@@ -13,13 +14,17 @@ const ListItem = (props) => {
 
     const dispatch = useDispatch();
 
-    const onClickDelete = (e) => {
+    const onClickDelete = async (e) => {
         e.preventDefault();
 
-        dispatch(BlogThunk({
+        const result = await dispatch(BlogThunk({
             endpoint: blogId,
             method: 'DELETE'
         }))
+
+        if(!!result.error){
+            toast.error(result.error.message || 'Something went wrong!!')
+        }
     }
 
     const isLoggedIn = useSelector((state) => state.userInfo.loggedIn);
@@ -28,7 +33,7 @@ const ListItem = (props) => {
             <div className="col-md-5">
                 <img
                     className="img-fluid mb-4 mb-md-0"
-                    src={require("../../../img/" + props.images[0])}
+                    src={ require("../../../img/" + props.images[0]) }
                     alt="Image"
                 />
             </div>

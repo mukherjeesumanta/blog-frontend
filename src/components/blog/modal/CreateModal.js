@@ -5,16 +5,16 @@ import BlogModal from "./BlogModal";
 const CreateModal = () => {
     const isCreateMode = useSelector((state) => state.blogs.isCreateMode);
 
-    const blogDetail = useSelector(state => state.blogs.blogDetail);
-    const data = blogDetail.isSuccess ? blogDetail.data : {};
+    const newBlog = useSelector(state => state.blogs.newBlog);
+    const data = newBlog.data || {};
 
     return (
         <BlogModal
             isVisible={isCreateMode}
-            title={'Edit Blog'}
-            blogTitle={data.title}
-            changeType={'edit'}
-            description={data.description}
+            title={'Create New Blog'}
+            blogTitle={ data?.title || '' }
+            changeType={'create'}
+            description={ data?.description || '' }
         />
     );
 }

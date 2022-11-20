@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import { auth } from '../../reducers/auth';
-import BlogModal from '../blog/modal/BlogModal';
+import CreateModal from '../blog/modal/CreateModal';
+import { openCreateMode } from '../../reducers/blogReducer';
 
 import './NavBar.css';
 
@@ -32,7 +32,7 @@ const NavBar = (props) => {
         dispatch(auth({ action: 'logout' }));
     }
     const onClickCreate = () => {
-        
+        dispatch(openCreateMode())
     }
 
     return (
@@ -45,7 +45,7 @@ const NavBar = (props) => {
                     </button>
                     <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div className="navbar-nav m-auto">
-                            <NavLink className="nav-item nav-link" to="/">Home</NavLink>
+                            <NavLink className="nav-item nav-link" to="/">{(!!loggedIn) ? 'Dashboard' : 'Home' }</NavLink>
                             <NavLink className="nav-item nav-link" to="/about">About </NavLink>
                             {/* <a href="/" className="nav-item nav-link active">Home</a>
                         <a href="about.html" className="nav-item nav-link">About</a>
@@ -72,7 +72,7 @@ const NavBar = (props) => {
                     </div>
                 </nav>
             </div>
-            <BlogModal />
+            <CreateModal />
         </>
     )
 }
