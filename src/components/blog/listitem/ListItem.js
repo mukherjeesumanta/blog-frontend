@@ -72,7 +72,7 @@ const ListItem = (props) => {
                     </a>
                 </div>
             </div>
-            <BlogModal />
+            <BlogModal blog={{ ...props }} />
         </>
     );
 };

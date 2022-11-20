@@ -8,7 +8,7 @@ export const FetchData = async (endpoint, { method, body, ...customConfig } = {}
     const headers = { "Content-Type": "application/json" };
 
     if (token) {
-        headers.Authorization = `Bearer ${token}`;
+        headers.authorization = `Bearer ${token}`;
     }
 
     const config = {

@@ -12,7 +12,11 @@ const BlogSlice = createSlice({
       loading: false,
       isSuccess: false,
       message: "",
-      isEditMode: false
+      isEditMode: false,
+      blogDetail: {
+        isSuccess: false,
+        loading: false
+      }
     },
     reducers: {
       openEditMode(state) {
@@ -20,6 +24,13 @@ const BlogSlice = createSlice({
       },
       closeEditMode(state) {
         state.isEditMode = false;
+      },
+
+      updateBlogTitle(state, { payload }) {
+        state.blogDetail.data.title = payload;
+      },
+      updateBlogContent(state, { payload }) {
+        state.blogDetail.data.description = payload;
       }
     },
     extraReducers: {
@@ -28,16 +39,26 @@ const BlogSlice = createSlice({
       },
       [BlogThunk.fulfilled]: (state, action, ...rest) => {
         const method = action.meta.arg.method;
+        const endpoint = action.meta.arg.endpoint;
         let blogId;
 
         if(method === 'DELETE') {
           blogId = action.meta.arg.endpoint;
           const index = state.data.findIndex((blog) => blog._id === blogId )
           state.data.splice(index, 1);
-        } else {
+        } else if(method === 'GET') {
           state.results = action.payload.results;
-          state.data = action.payload.data;
           state.status = action.payload.status;
+
+          if(!!endpoint && !['get-my-blogs', ''].includes(endpoint) ) {
+            // Get one blog details
+            state.blogDetail = action.payload;
+            state.blogDetail.loading = false;
+            state.blogDetail.isSuccess = true;
+          } else {
+            // get blog list
+            state.data = action.payload.data;
+          }
         }
         state.loading = false;
         state.isSuccess = true;
@@ -50,6 +71,6 @@ const BlogSlice = createSlice({
     },
   });
   
-  export const { openEditMode, closeEditMode } = BlogSlice.actions;
+  export const { openEditMode, closeEditMode, updateBlogTitle, updateBlogContent } = BlogSlice.actions;
   export default BlogSlice;
 
