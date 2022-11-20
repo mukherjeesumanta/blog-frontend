@@ -39,10 +39,10 @@ export const parseHtmlEntities = (str) => {
     return String(str).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
 }
 
-export const stripHtml = (str) => str.replace(/(<([^>]+)>)/gi, '')
-                          //                  /(<([^>]+)>)/gi       ||    /<(.|\n)*?>/g
+export const stripHtml = (str) => !!str ? str.replace(/(<([^>]+)>)/gi, '') : '';
+                          //                /(<([^>]+)>)/gi       ||    /<(.|\n)*?>/g
 
 export const stripScript = (html) => {
     const scriptRegex = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
-    return html.replace(scriptRegex, "");
+    return !!html ? html.replace(scriptRegex, "") : '';
 }

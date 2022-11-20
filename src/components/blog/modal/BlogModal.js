@@ -11,13 +11,12 @@ import './BlogModal.css'
 
 
 const BlogModal = (props) => {
-    //console.log(props)
-    const blogId = props.blog.blogId
-    const isEditMode = useSelector((state) => state.blogs.isEditMode);
     const dispatch = useDispatch();
 
     const hideModal = () => {
-        dispatch(closeEditMode())
+        if(props.changeType === 'edit') {
+            dispatch(closeEditMode())
+        }
     }
 
     const editor = useRef();
@@ -27,47 +26,42 @@ const BlogModal = (props) => {
         editor.current = sunEditor;
     };
 
-
-    useEffect(() => {
-        dispatch(BlogThunk({
-            endpoint: blogId,
-            method: 'GET'
-        }))
-    }, [blogId, props.blog.title, props.blog.description])
-
     const blogDetail = useSelector(state => state.blogs.blogDetail);
     const data = blogDetail.isSuccess ? blogDetail.data : {};
 
     const onTitleChange = (e) => {
-        dispatch(updateBlogTitle(e.target.value))
+        if(props.changeType === 'edit') {
+            dispatch(updateBlogTitle(e.target.value))
+        }
     }
     const onContentChange = (content) => {
-        dispatch(updateBlogContent({content, blogId}))
-    }
-
-    const updateBlogList = (blogId) => {
-        dispatch(updateBlogList(blogId))
+        if(props.changeType === 'edit') {
+            dispatch(updateBlogContent(content))
+        }
     }
 
     const onClickSave = () => {
         //console.log('=========', data)
-        dispatch(BlogThunk({
-            endpoint: blogId,
-            method: 'PATCH',
-            body: data
-        }))
-        hideModal()
-        //updateBlogList(blogId)
+        if(props.changeType === 'edit') {
+            dispatch(BlogThunk({
+                endpoint: data._id,
+                method: 'PATCH',
+                body: data
+            }))
+            hideModal()
+        }
+        
+        //updateBlogList(props.blogId)
     }
 
     return (
-        <Modal show={isEditMode} onHide={hideModal} dialogClassName="blog-edit-modal">
+        <Modal show={props.isVisible} onHide={props.onHide} dialogClassName="blog-edit-modal">
             <Modal.Header closeButton>
-                <Modal.Title>Edit Blog</Modal.Title>
+                <Modal.Title>{props.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form.Group className="mb-3" controlId="formBasicText">
-                    <Form.Control type="text" placeholder="Enter blog title" defaultValue={data.title} onChange={onTitleChange} />
+                    <Form.Control type="text" placeholder="Enter blog title" defaultValue={props.blogTitle} onChange={onTitleChange} />
                 </Form.Group>
                 <SunEditor
                     getSunEditorInstance={getSunEditorInstance}
@@ -81,7 +75,7 @@ const BlogModal = (props) => {
                     height="200"
                     width="100%"
                     placeholder="Start writing here..."
-                    setContents={parseHtmlEntities(data.description)}
+                    setContents={parseHtmlEntities(props.description)}
                     onChange={onContentChange}
                 />
             </Modal.Body>

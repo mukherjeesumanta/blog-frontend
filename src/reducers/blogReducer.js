@@ -13,6 +13,7 @@ const BlogSlice = createSlice({
       isSuccess: false,
       message: "",
       isEditMode: false,
+      isCreateMode: false,
       blogDetail: {
         isSuccess: false,
         loading: false
@@ -30,10 +31,10 @@ const BlogSlice = createSlice({
         state.blogDetail.data.title = payload;
       },
       updateBlogContent(state, { payload }) {
-        state.blogDetail.data.description = payload.content;
+        state.blogDetail.data.description = payload;
 
-        const index = state.data.findIndex((blog) => blog._id === payload.blogId)
-        const blogCopy = JSON.parse(JSON.stringify(state.blogDetail))
+        /* const index = state.data.findIndex((blog) => blog._id === payload.blogId)
+        const blogCopy = JSON.parse(JSON.stringify(state.blogDetail)) */
         //state.data[index] = {...state.blogDetail}
       },
 
