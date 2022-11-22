@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import toast from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
 
 import { auth } from "../../reducers/auth";
 
@@ -12,6 +13,8 @@ const SignupForm = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -33,6 +36,7 @@ const SignupForm = (props) => {
         toast.error(result.error.message || 'Something went wrong!!')
       } else {
           props.hideModal()
+          navigate('/')
       }
     }
     return (

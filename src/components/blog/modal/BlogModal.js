@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Modal, Button, Form } from "react-bootstrap";
 import SunEditor, { buttonList } from 'suneditor-react';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
 
 import { BlogThunk, closeEditMode, closeCreateMode, updateBlogTitle, updateBlogContent, updateNewBlogTitle, updateNewBlogContent } from "../../../reducers/blogReducer";
 import { parseHtmlEntities } from "../../../utils/util";
@@ -12,6 +13,7 @@ import './BlogModal.css'
 
 
 const BlogModal = (props) => {
+    const navigate = useNavigate();
     let blogPath = '';
     const dispatch = useDispatch();
 
@@ -74,6 +76,7 @@ const BlogModal = (props) => {
             toast.error(result.error.message || 'Something went wrong!!')
         } else {
             hideModal()
+            navigate('/')
         }
     }
 
