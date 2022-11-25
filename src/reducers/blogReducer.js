@@ -61,6 +61,9 @@ const BlogSlice = createSlice({
         message: "",
         description: ""
       }
+    },
+    appendToBlogList(state, { payload }) {
+      state.data.push(payload)
     }
   },
   extraReducers: {
@@ -123,7 +126,8 @@ export const {
   updateBlogContent,
   updateNewBlogTitle,
   updateNewBlogContent,
-  resetNewBlogAfterSave
+  resetNewBlogAfterSave,
+  appendToBlogList
 } = BlogSlice.actions;
 
 export default BlogSlice;

@@ -5,7 +5,17 @@ import SunEditor, { buttonList } from 'suneditor-react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
 
-import { BlogThunk, closeEditMode, closeCreateMode, updateBlogTitle, updateBlogContent, updateNewBlogTitle, updateNewBlogContent, resetNewBlogAfterSave } from "../../../reducers/blogReducer";
+import {
+    BlogThunk,
+    closeEditMode,
+    closeCreateMode,
+    updateBlogTitle,
+    updateBlogContent,
+    updateNewBlogTitle,
+    updateNewBlogContent,
+    resetNewBlogAfterSave,
+    appendToBlogList
+} from "../../../reducers/blogReducer";
 import { parseHtmlEntities } from "../../../utils/util";
 
 import 'suneditor/dist/css/suneditor.min.css';
@@ -74,7 +84,8 @@ const BlogModal = (props) => {
 
         if(!!result.error){
             toast.error(result.error.message || 'Something went wrong!!')
-        } else {
+        } else if(result.payload.status === 'success') {
+            dispatch(appendToBlogList(result.payload.data))
             hideModal()
             dispatch(resetNewBlogAfterSave())
             navigate('/')
