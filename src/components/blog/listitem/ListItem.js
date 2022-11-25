@@ -70,8 +70,8 @@ const ListItem = (props) => {
                         </svg>
                     </a>}
 
-                    <Link className="link-dark" to={redirectTo}>
-                        <h3 className="mt-md-4 px-md-3 mb-2 py-2 bg-white font-weight-bold">
+                    <Link className="link-dark blog-heading" to={redirectTo}>
+                        <h3 className="mt-md-4 px-md-3 mb-2 py-2 bg-white font-weight-bold blog-heading">
                             {props.title}
                         </h3>
                     </Link>

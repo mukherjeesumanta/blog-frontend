@@ -149,3 +149,19 @@
   padding: 0;
   list-style-type: none;
 }
+
+.bg-blue {
+  background-color: #3c39e5;
+}
+.round-border-top {
+    border-radius: 20px 20px 0 0;
+}
+.round-border-bottom {
+  border-radius: 0 0 20px 20px;
+}
+.white-font {
+  color: #fff;
+}
+.nav-link.active {
+  font-weight: 700;
+}

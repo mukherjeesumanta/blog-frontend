@@ -4,4 +4,11 @@ a.delete-icon {
   right: 15px;
 }
 
+.blog-heading {
+  color: #0855f7
+}
 
+.blog-heading:hover {
+  color: #0855f7;
+  text-decoration: underline;
+}
