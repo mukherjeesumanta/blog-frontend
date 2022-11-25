@@ -52,6 +52,15 @@ const BlogSlice = createSlice({
     },
     updateNewBlogContent(state, { payload }) {
       state.newBlog.data.description = payload;
+    },
+    resetNewBlogAfterSave(state, _) {
+      state.newBlog = {
+        data: {},
+        isSuccess: false,
+        loading: false,
+        message: "",
+        description: ""
+      }
     }
   },
   extraReducers: {
@@ -113,7 +122,8 @@ export const {
   updateBlogTitle,
   updateBlogContent,
   updateNewBlogTitle,
-  updateNewBlogContent
+  updateNewBlogContent,
+  resetNewBlogAfterSave
 } = BlogSlice.actions;
 
 export default BlogSlice;
