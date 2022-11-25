@@ -8,12 +8,14 @@ import SignupForm from '../user/SignupForm';
 import { auth } from '../../reducers/auth';
 import CreateModal from '../blog/modal/CreateModal';
 import { openCreateMode } from '../../reducers/blogReducer';
+import { showMobileNav } from '../../reducers/uiReducer';
 
 import './NavBar.css';
 
 const NavBar = (props) => {
     const [isLogin, setIsLogin] = useState(true);
     let [modalVisible, setModalVisible] = useState(false);
+    const mobileNavBarVisible = useSelector((state) => state.uiStates.mobileNavBarVisible);
 
     const showModal = (type) => {
       setIsLogin(type === 'login');
@@ -52,10 +54,14 @@ const NavBar = (props) => {
             <div className="container p-0">
                 <nav className="navbar navbar-expand-lg bg-secondary navbar-dark">
                     <a href="" className="navbar-brand d-block d-lg-none">Navigation</a>
-                    <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <button type="button" className="navbar-toggler"
+                        data-toggle="collapse"
+                        data-target="#navbarCollapse"
+                        onClick={() => dispatch(showMobileNav(!mobileNavBarVisible))}
+                        >
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div className={"collapse navbar-collapse justify-content-between " + (mobileNavBarVisible ? 'show' : '')} id="navbarCollapse">
                         <div className="navbar-nav m-auto">
                             <NavLink className="nav-item nav-link" to="/">{(!!loggedIn) ? 'Dashboard' : 'Home'}</NavLink>
                             <NavLink className="nav-item nav-link" to="/about">About </NavLink>
