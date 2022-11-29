@@ -5,9 +5,7 @@ import { toast } from 'react-hot-toast';
 import './SideBar.css';
 
 const SideBar = () => {
-    {/* <div>
-            <button onClick={() => toast.success('Here is your toast.')}>Make me a toast</button>
-          </div> */}
+
     return (
         <div className="sidebar">
             <div className="sidebar-text d-flex flex-column h-100 justify-content-center text-center">
@@ -22,7 +20,7 @@ const SideBar = () => {
                     <a className="btn btn-outline-primary mr-2" href="#"><i className="fab fa-linkedin-in"></i></a>
                     <a className="btn btn-outline-primary mr-2" href="#"><i className="fab fa-instagram"></i></a>
                 </div>
-                <a onClick={() => toast.success('Thanks for showing interest in me!')} 
+                <a onClick={() => toast.success('Thanks for showing interest in me')} 
                     className="btn btn-lg btn-block btn-primary mt-auto"
                     href="#">Hire Me</a>
             </div>
