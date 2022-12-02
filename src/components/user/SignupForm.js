@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import toast from 'react-hot-toast';
@@ -8,18 +8,25 @@ import { auth } from "../../reducers/auth";
 
 
 const SignupForm = (props) => {
-    const [name, setName] = useState("");
-    const [role, setRole] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordConfirm, setPasswordConfirm] = useState("");
+    const nameRef = useRef();
+    const roleRef = useRef();
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const passwordConfirmRef = useRef();
 
     const navigate = useNavigate();
-
     const dispatch = useDispatch();
 
-    const onClickSignup = async (e) => {
+    const onSubmit = async (e) => {
       e.preventDefault();
+
+      const name = nameRef.current.value;
+      const role = roleRef.current.value;
+      const email = emailRef.current.value;
+      const password = passwordRef.current.value;
+      const passwordConfirm = passwordConfirmRef.current.value;
+
+      if(!name || !role || !email || !password || !passwordConfirm) return;
 
       const result = await dispatch(auth({
         action: 'signup',
@@ -40,25 +47,27 @@ const SignupForm = (props) => {
       }
     }
     return (
-      <Form onSubmit={()=>{}}>
+      <Form onSubmit={ onSubmit }>
         <Form.Group controlId="formBasicFirstName">
           <Form.Label>Name</Form.Label>
           <Form.Control
             required
+            minLength="3"
+            maxLength="50"
             type="text"
             placeholder="Enter Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            ref={nameRef}
           />
         </Form.Group>
         <Form.Group controlId="formBasicLastName">
           <Form.Label>Role</Form.Label>
           <Form.Control
             required
+            minLength="3"
+            maxLength="6"
             as="select"
             placeholder="Last Name"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+            ref={roleRef}
           >
           <option value="">Select</option>
           <option value="user">User</option>
@@ -70,10 +79,12 @@ const SignupForm = (props) => {
           <Form.Label>Email address</Form.Label>
           <Form.Control
             required
+            minLength="3"
+            maxLength="50"
             type="email"
+            pattern="^\w+@[a-zA-Z0-9]+?\.[a-zA-Z]{2,3}$"
             placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            ref={emailRef}
           />
         </Form.Group>
   
@@ -81,23 +92,25 @@ const SignupForm = (props) => {
           <Form.Label className="mt-2">Password</Form.Label>
           <Form.Control
             required
+            minLength="3"
+            maxLength="50"
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
           />
         </Form.Group>
         <Form.Group controlId="formBasicPasswordConf">
           <Form.Label className="mt-2">Confirm Password</Form.Label>
           <Form.Control
             required
+            minLength="3"
+            maxLength="50"
             type="password"
             placeholder="Conform Password"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
+            ref={passwordConfirmRef}
           />
         </Form.Group>
-        <Button className="mt-2" type="submit" onClick={onClickSignup}>Signup</Button>
+        <Button className="mt-2" type="submit">Signup</Button>
       </Form>
     );
   };

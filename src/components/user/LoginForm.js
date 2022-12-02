@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import toast from 'react-hot-toast';
@@ -8,15 +8,20 @@ import { auth } from "../../reducers/auth";
 
 
 const LoginForm = (props) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const emailRef = useRef();
+    const passRef = useRef();
 
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
-    const onClickLogin = async (e) => {
+    const onSubmit = async (e) => {
       e.preventDefault();
+
+      const email = emailRef.current.value;
+      const password = passRef.current.value;
+
+      if(!email || !password) return;
 
       const result = await dispatch(auth({
         action: 'login',
@@ -33,14 +38,14 @@ const LoginForm = (props) => {
       }
     }
     return (
-      <Form onSubmit={()=>{}}>
+      <Form onSubmit={ onSubmit }>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
+            required="required"
             placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            ref={emailRef}
           />
         </Form.Group>
   
@@ -48,12 +53,12 @@ const LoginForm = (props) => {
           <Form.Label className="mt-2">Password</Form.Label>
           <Form.Control
             type="password"
+            required="required"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passRef}
           />
         </Form.Group>
-        <Button className="mt-2" type="button" onClick={onClickLogin} >
+        <Button className="mt-2" type="submit">
           Login
         </Button>
       </Form>
